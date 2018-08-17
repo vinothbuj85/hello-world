@@ -1,0 +1,165 @@
+Convert .pfx to .pem 
+
+C:\Users\IBM_ADMIN\Desktop\openssl-1.0.2j-fips-x86_64\OpenSSL\bin>
+
+openssl.exe pkcs12 -in ads-Fmspsi01-CA.pfx -out ads-Fmspsi01-CA.pem -nodes
+
+openssl.exe pkcs12 -in inotestest.ads.fms-sg.de.pfx -out inotestest.ads.fms-sg.de.pem -nodes
+
+
+message analyzer 
+
+
+
+kyrtool import roots -i "E:\SANCERT\RootCA\root CA\ads-FMSPCR01.pem" -k "E:\SANCERT\Sancert\inotes.ads.fms-sg.de.kyr"
+
+kyrtool import roots -i "E:\SANCERT\RootCA\Intermediate CA\ads-Fmspsi01-CA.pem" -k "E:\SANCERT\Sancert\inotes.ads.fms-sg.de.kyr"
+
+
+kyrtool import certs -i "E:\SANCERT\fmspdom001.cer" -k "E:\SANCERT\Sancert\inotes.ads.fms-sg.de.kyr"
+
+
+kyrtool import roots -i "E:\SANCERT\RootCA\root CA\ads-FMSPCR01.pem" -k "E:\SANCERT\Sancert\inotes.ads.fms-sg.de.kyr"
+
+kyrtool import roots -i "E:\SANCERT\RootCA\Intermediate CA\ads-Fmspsi01-CA.pem" -k "E:\SANCERT\Sancert\inotes.ads.fms-sg.de.kyr"
+
+
+kyrtool import certs -i "E:\SANCERT\fmspdom002.cer" -k "E:\SANCERT\Sancert\inotes.ads.fms-sg.de.kyr"
+
+
+
+
+
+
+E:\Notes>kyrtool import certs -i "E:\SANCERT\fmspdom002.cer" -k "E:\SANCERT\Sanc
+ert\fmspdom002.ads.fms-sg.de.kyr"
+
+Using keyring path 'E:\SANCERT\Sancert\fmspdom002.ads.fms-sg.de.kyr'
+SECIssUpdateKeyringLeafCert succeeded
+
+
+E:\Notes>kyrtool import roots -i "E:\SANCERT\RootCA\root CA\ads-FMSPCR01.pem" -k
+ "E:\SANCERT\Sancert\fmspdom002.ads.fms-sg.de.kyr"
+
+Using keyring path 'E:\SANCERT\Sancert\fmspdom002.ads.fms-sg.de.kyr'
+SEC_mpfct_ImportTrustRootToKYR succeeded
+
+
+E:\Notes>kyrtool import roots -i "E:\SANCERT\RootCA\Intermediate CA\ads-Fmspsi01
+-CA.pem" -k "E:\SANCERT\Sancert\fmspdom002.ads.fms-sg.de.kyr"
+
+Using keyring path 'E:\SANCERT\Sancert\fmspdom002.ads.fms-sg.de.kyr'
+SEC_mpfct_ImportTrustRootToKYR succeeded
+
+
+
+kyrtool create -k C:\path\keyring.kyr -p password
+
+Then I've converted my pfx certificate to pem in opnessl:
+
+openssl pkcs12 -in certificate.pfx -out certificate.pem
+
+Then I've tried to import my PEM into the new keyring:
+
+kyrtool import all -i certificate.pem -k C:\path\keyring.kyr -v
+
+
+
+
+
+
+
+SET OPENSSL_CONF=E:\openssl-1.0.2j-fips-x86_64\OpenSSL\bin\openssl.cnf
+
+SET OpenSSL_BIN=E:\openssl-1.0.2j-fips-x86_64\OpenSSL\bin
+
+SET Kyrtool=E:\Notes\kyrtool.exe
+
+SET IBMNotesProgram=E:\Notes
+
+
+
+
+openssl genrsa -out inotestest.ads.fms-sg.de.key 4096
+
+openssl req -new -sha256 -key inotestest.ads.fms-sg.de.key -out inotestest.ads.fms-sg.de.csr
+
+
+kyrtool ="E:\Notes\notes.ini" create -k "E:\SANCERT\RootCA\inotestest.ads.fms-sg.de.kyr" -p lotus123
+
+
+openssl pkcs7 -print_certs -in inotestest.ads.fms-sg.de.pem -out "inotestest.ads.fms-sg.de.crt"
+
+
+openssl pkcs7 -print_certs -in inotestest.ads.fms-sg.de.p7b -out inotestest.ads.fms-sg.de.crt
+
+
+======================================================================================================================================================
+
+
+kyrtool import roots -i "E:\SANCERT\RootCA\CARootCertificate.crt" -k "E:\SANCERT\RootCA\inotestest.ads.fms-sg.de.kyr"
+
+kyrtool import keys -i "E:\openssl-1.0.2j-fips-x86_64\OpenSSL\bin\inotestest.ads.fms-sg.de.key" -k "E:\SANCERT\RootCA\inotestest.ads.fms-sg.de.kyr"
+
+kyrtool import certs -i "E:\SANCERT\RootCA\inotestest.ads.fms-sg.de.crt" -k "E:\SANCERT\RootCA\inotestest.ads.fms-sg.de.kyr"
+
+
+kyrtool ="E:\notes\notes.ini" show keys -k "E:\SANCERT\RootCA\inotestest.ads.fms-sg.de.kyr"
+
+================================================================================================================================
+kyrtool import roots -i "E:\SANCERT\RootCA\Intermediate CA\ads-Fmspsi01-CA.pem" -k "E:\SANCERT\RootCA\inotestest.ads.fms-sg.de.kyr"
+
+
+
+
+kyrtool import keys -i "E:\openssl-1.0.2j-fips-x86_64\OpenSSL\bin\inotestest.ads.fms-sg.de.key" -k "E:\SANCERT\RootCA\inotestest.ads.fms-sg.de.kyr"
+
+
+
+
+kyrtool ="E:\Notes\notes.ini" show keys -k "E:\SANCERT\RootCA\inotestest.ads.fms-sg.de.kyr"
+
+
+
+
+
+openssl pkcs7 -print_certs -in “E:\SANCERT\RootCA\inotestest.ads.fms-sf.de.p7b” -out “E:\SANCERT\RootCA\inotestest.ads.fms-sf.de.pem”
+
+openssl x509 -inform der -in inotestest.ads.fms-sg.de.pem -out inotestest.ads.fms-sg.de.crt
+
+
+openssl pkcs7 -print_certs -in "E:\SANCERT\RootCA\inotestest.ads.fms-sg.de.pem" -out “E:\SANCERT\RootCA\inotestest.ads.fms-sf.de.pem”
+
+
+
+
+
+
+
+openssl pkcs7 -print_certs -in “E:\SANCERT\RootCA\inotestest.ads.fms-sf.de.pfx” -out “E:\SANCERT\RootCA\inotestest.ads.fms-sf.de.crt”
+
+
+
+openssl pkcs7 -print_certs -in “E:\SANCERT\RootCA\inotestest.ads.fms-sf.de.p7b” -out “E:\SANCERT\RootCA\inotestest.ads.fms-sf.de.pem”
+
+openssl pkcs12 -in certificate.pfx -out certificate.cer -nodes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
